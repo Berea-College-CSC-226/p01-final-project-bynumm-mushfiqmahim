@@ -21,7 +21,7 @@ obstacles, and ends the game upon boundary, self-, or obstacle-collision.`
 **Source Assignment(s)**: `T11: The Legend of Tuna: Breath of Catnip, T12: Events and GUIs, T10: Intro to Classes`
 
 ❗️**CRC Card(s)**:
-  - Create a CRC card for each class that your project will implement.
+  - Create a CRC card for each class that your project will implement. 
   - See this link for a sample CRC card and a template to use for your own cards (you will have to make a copy to edit):
     [CRC Card Example](https://docs.google.com/document/d/1JE_3Qmytk_JGztRqkPXWACJwciPH61VCx3idIlBCVFY/edit?usp=sharing)
   - Tables in markdown are not easy, so we suggest saving your CRC card as an image and including the image(s) in the 
