@@ -1134,3 +1134,583 @@ main()
 #####################################################################################################
 T10: Intro to Classes
 #####################################################################################################
+######################################################################
+# Author: Dr. Scott Heggen         TODO: Change this to your names
+# Username: heggens                TODO: Change this to your usernames
+#
+# Assignment: T10: Intro to Classes
+#
+# Purpose:  Demonstrate the collaboration between classes,
+#           such as using a point to create a rectangle
+######################################################################
+# Acknowledgements:
+#
+# Original code created by Dr. Scott Heggen
+
+
+# licensed under a Creative Commons
+# Attribution-Noncommercial-Share Alike 3.0 United States License.
+####################################################################################
+
+
+import t10_rectangle as rectangle  # notice the different ways we can import, and how that changes how we use it below
+from t10_point import Point        # and again...
+import random
+import turtle
+
+
+def generate_random_colors(n, rng):
+   """
+   Generates mulitle random numbers at once
+
+
+   return: tuple of n random numbers
+   """
+   rans = []
+   for i in range(n):
+       new_random = random.randrange(rng)
+       rans.append(new_random)
+
+
+   return tuple(rans)
+
+
+def main():
+   """
+   Draws 25 randomly placed, randomly sized, randomly colored rectangles using the turtle library.
+   The code demonstrates interactions between classes, such as the use of a Point
+   object to create a Rectangle object.
+
+
+   :return: None
+   """
+   wn = turtle.Screen()
+   wn.colormode(255)
+
+
+   for i in range(25):
+       # each loop iteration, a new point object at a random (x, y) coordinate
+       (randx, randy) = generate_random_colors(2, 500)
+       pt = Point(randx-250, randy-250)
+
+
+       # a rectangle object which starts at the point defined above
+       (randw, randh) = generate_random_colors(2, i + 100)
+       rect = rectangle.Rectangle(pt, randw, randh)
+
+
+       # calls the draw_rectangle method of the Rectangle object
+       (randr, randg, randb) = generate_random_colors(3, 255)
+       randa = random.randrange(360)
+       rect.draw_rectangle(randr, randg, randb, randa)
+
+
+   wn.exitonclick()
+
+
+
+
+if __name__ == "__main__":
+   main()
+
+########################################################################
+######################################################################
+# Author: Mushfiq, Scott
+# Username: mushfiqmahim, kirkpatrickm
+#
+# Assignment: T10: Intro to Classes
+#
+#
+# Purpose: A class for creating rectangles. Collaborates with the Points class
+######################################################################
+# Acknowledgements:
+####################################################################################
+
+
+
+
+import turtle
+from t10_point import Point
+from t10_shape import Shape
+
+
+
+
+def draw_sun(center: Point, radius_side: int, sides: int = 30) -> None:
+   """
+   Draws a 'sun' by approximating a circle with a many-sided regular polygon.
+
+
+   :param center: Point where the sun starts (lower-left corner of polygon path)
+   :param radius_side: side length for the polygon (controls size)
+   :param sides: number of sides for the polygon (more sides ≈ rounder)
+   :return: None
+   """
+   sun = Shape(center, sides, radius_side)
+   sun.draw_shape(255, 215, 0)  # golden yellow
+
+
+
+
+def draw_house(base_origin: Point, wall_size: int) -> None:
+   """
+   Draws a simple house: a square wall and a triangular roof.
+
+
+   :param base_origin: lower-left corner of the house walls
+   :param wall_size: side length of the square walls
+   :return: None
+   """
+   # Walls (square)
+   walls = Shape(base_origin, 4, wall_size)
+   walls.draw_shape(205, 133, 63)  # brownish
+
+
+   # Roof sits on top-left corner of walls
+   roof_start = Point(base_origin.x, base_origin.y + wall_size)
+   roof = Shape(roof_start, 3, wall_size)
+   roof.draw_shape(178, 34, 34)  # brick red
+
+
+
+
+def draw_pentagon_flower(center: Point, size: int) -> None:
+   """
+   Draws a decorative pentagon 'flower' near the house.
+
+
+   :param center: starting point for the pentagon
+   :param size: side length of the pentagon
+   :return: None
+   """
+   p1 = Shape(center, 5, size)
+   p1.draw_shape(138, 43, 226)  # blue-violet
+
+
+
+
+def main() -> None:
+   """
+   Sets up the Turtle screen and draws multiple shapes of different sizes,
+   using the Shape class. Exits on click.
+   """
+   wn = turtle.Screen()
+   wn.title("T10 – My Shapes")
+   wn.colormode(255)
+
+
+
+
+   turtle.tracer(0, 0)
+
+
+
+
+   # Sun (top-left)
+   draw_sun(center=Point(-260, 160), radius_side=14, sides=30)
+
+
+   # House (center-bottom)
+   draw_house(base_origin=Point(-80, -150), wall_size=160)
+
+
+
+
+   # Small triangle (path/stone)
+   small_tri = Shape(Point(120, -160), 3, 50)
+   small_tri.draw_shape(70, 130, 180)
+
+
+   # Medium square (window)
+   window = Shape(Point(-30, -60), 4, 40)
+   window.draw_shape(173, 216, 230)  # light blue
+
+
+   # Pentagon flower
+   draw_pentagon_flower(center=Point(200, -40), size=70)
+
+
+   # Another small polygon (bush)
+   bush = Shape(Point(-180, -140), 6, 22)  # hexagon
+   bush.draw_shape(34, 139, 34)
+
+
+
+
+   wn.update()
+   wn.exitonclick()
+
+
+
+
+if __name__ == "__main__":
+   main()
+#########################################################################
+######################################################################
+# Author: Dr. Scott Heggen        TODO: Change this to your names
+# Username: heggens               TODO: Change this to your usernames
+#
+# Assignment: T10: Intro to Classes
+#
+# Purpose:  Demonstrates a Point class and a related main() to create objects
+######################################################################
+# Acknowledgements:
+#
+# Based on the point class from our textbook:
+# https://runestone.academy/ns/books/published/csc226-spr22/ClassesBasics/UserDefinedClasses.html
+
+
+
+
+# licensed under a Creative Commons
+# Attribution-Noncommercial-Share Alike 3.0 United States License.
+####################################################################################
+
+
+import turtle       # needed by both point class and main()
+import random       # needed by main()
+
+
+
+
+class Point:
+   """
+   The Point class represents and manipulates x,y coordinates.
+   It is dependent upon the turtle libraries for draw_point() method.
+   In particular, a Screen must exist and the color mode should be set to 255
+   """
+   max_size = 10
+
+
+   def __init__(self, x=0, y=0):       # Each Point object has its own x and y coordinates and possibly a turtle
+       """
+       Initializer method a.k.a. Constructor:
+       Creates a new point at x, y. If no x, y are given, the point is created at 0, 0
+
+
+       :param x: the x coordinate of the point
+       :param y: the y coordinate of the point
+       """
+       self.x = x
+       self.y = y
+       self.turtley = None
+
+
+   def __str__(self):
+       """
+       Makes the str() function work with Points
+
+
+       :return: A formatted string for better printing
+       """
+       return "({0}, {1})".format(self.x, self.y)
+
+
+   def distance_from_origin(self):
+       """
+       Compute my distance from the origin
+
+
+       :return: float representing distance from (0, 0)
+       """
+       return ((self.x ** 2) + (self.y ** 2)) ** 0.5
+
+
+   def user_set(self):
+       """
+       Allows the user to change the x and y value of a Point
+
+
+       :return: None
+       """
+       self.x = int(input("Enter x: "))
+       self.y = int(input("Enter y: "))
+
+
+   def draw_point(self, r=0, g=0, b=0, text=""):         # black is the default color
+       """
+       Instantiates a Turtle object and draws the Point on the Screen
+
+
+       :param r: the red channel
+       :param g: the green channel
+       :param b: the blue channel
+       :param text: any additional text to stamp
+       :return: None
+       """
+       if not self.turtley:
+           self.turtley = turtle.Turtle()
+           self.turtley.hideturtle()
+       self.turtley.color(r, g, b)
+       self.turtley.penup()
+       self.turtley.goto(self.x, self.y)
+       self.turtley.showturtle()
+       self.turtley.stamp()
+
+
+       # This code was added from the original point.py class
+       # to allow custom text to be written to the screen
+       self.turtley.penup()
+       if text == "":
+           self.turtley.write(str(self), True)
+       else:
+           self.turtley.write(text, True)
+       self.turtley.hideturtle()
+
+
+
+
+   def getX(self):
+       return self.x
+   def getY(self):
+       return self.y
+
+
+   def midpoint(self,target):
+       mx = (self.x + target.x) / 2
+       my = (self.y + target.y) / 2
+       return Point(mx, my)
+
+
+
+
+# end class
+
+
+
+
+def main():
+   """
+   A program that demonstrates the use of the Point class
+
+
+   :return: None
+   """
+   wn = turtle.Screen()
+   wn.colormode(255)        # change color modes
+
+
+   p = Point()              # Instantiate an object of type Point at (0, 0)
+
+
+   print(p.getX())
+   print(p.getY())
+   print("point = " + str(p))
+
+
+   q = Point(30, 40)        # Make a second point at (30, 40)
+   print("point = " + str(q))
+   print("Check the turtle screen window to see your point")
+
+
+   p.draw_point()           # draw Point p as the default color of black
+   q.draw_point(255, 0, 0)# draw Point q as red (255, 0, 0)
+   mp = q.midpoint(p)
+   print(mp)
+
+
+   print("\nPlease enter x and y values. To end, enter x = 0 and y = 0.")
+   while q.x != 0 or q.y != 0:
+       q.user_set()
+       print("point = " + str(q))
+       q.draw_point(random.randrange(256), random.randrange(256), random.randrange(256))  # Random color
+
+
+   print("Exiting. Bye!")
+   wn.bye()
+
+
+# end main
+
+
+
+
+if __name__ == "__main__":
+   main()
+#########################################################################
+
+######################################################################
+# Author: Dr. Scott Heggen        TODO: Change this to your names
+# Username: heggens               TODO: Change this to your usernames
+#
+# Assignment: T10: Intro to Classes
+#
+#
+# Purpose: A class for creating rectangles. Collaborates with the Points class
+######################################################################
+# Acknowledgements:
+#
+# Much of the code is originally from: http://openbookproject.net/thinkcs/python/english3e/
+
+
+# licensed under a Creative Commons
+# Attribution-Noncommercial-Share Alike 3.0 United States License.
+####################################################################################
+
+
+import turtle
+
+
+
+
+class Rectangle:
+   def __init__(self, posn, w, h):
+       """
+        A class to manufacture rectangle objects.
+
+
+       :param posn: a Point object representing the starting point of the rectangle
+       :param w: the rectangle width
+       :param h: the rectangle height
+       """
+       self.corner = posn          # A Point object to hold the bottom left corner of the rectangle
+       self.width = w
+       self.height = h
+
+
+   def __str__(self):
+       """
+       Overridden string class. Prints a rectangle object more cleanly
+
+
+       :return: A formatted string
+       """
+
+
+       return "({0}, {1}, {2})".format(self.corner, self.width, self.height)
+
+
+   def grow(self, delta_width, delta_height):
+       """
+       Grow (or shrink) this object by the deltas
+
+
+       :param delta_width: change in the width
+       :param delta_height: change in the height
+       :return: None
+       """
+       self.width += delta_width
+       self.height += delta_height
+
+
+   def move(self, dx, dy):
+       """
+       Move this object by the deltas.
+
+
+       :param dx: change in the x coordinate
+       :param dy: change in the y coordinate
+       :return: None
+       """
+       self.corner.x += dx
+       self.corner.y += dy
+
+
+   def draw_rectangle(self, r=0, g=0, b=0, angle=0, text=""):  # black is the default color
+       """
+       Instantiates a Turtle object and draws the Rectangle on the Screen at an angle, and tags it with a text.
+       Notice the turtle is implemented differently here than in the Point class,
+       as a demonstration of the many ways in which we can implement the same thing.
+
+
+       :param r: the red channel
+       :param g: the green channel
+       :param b: the blue channel
+       :param angle: the angle to draw the turtle
+       :param text: any additional text to write
+       :return: None
+       """
+       turt = turtle.Turtle()
+       turt.color(r, g, b)
+       turt.penup()
+
+
+       # self.corner refers to a Point object, so self.corner.x refers to the x-coordinate;
+       # self.corner.y refers to the y-coordinate
+       turt.goto(self.corner.x, self.corner.y)
+
+
+       # rotates to turtle by angle degrees
+       turt.left(angle)
+       turt.showturtle()
+       turt.pendown()
+
+
+       # draws the rectangle to the screen
+       for i in range(2):
+           turt.forward(self.width)
+           turt.left(90)
+           turt.forward(self.height)
+           turt.left(90)
+
+
+       # writes custom text to the screen if provided;
+       # else prints the starting coordinates, width, and height of the rectangle
+       if text == "":
+           turt.write(str(self), True)
+       else:
+           turt.write(text, True)
+       turt.hideturtle()
+# end class
+
+
+# Look. No main!
+
+########################################################################
+import turtle
+import math
+from t10_point import Point
+
+
+
+
+class Shape:
+   # Class attribute
+   max_size = 500
+
+
+   def __init__(self, start_point, num_sides, side_length):
+       """
+       Creates a new Shape object.
+
+
+       :param start_point: Point object where the shape starts
+       :param num_sides: number of sides of the shape (e.g., 3 for triangle, 4 for square)
+       :param side_length: length of each side
+       """
+       self.start_point = start_point
+       self.num_sides = num_sides
+       self.side_length = side_length
+       self.turtley = None  # Will be assigned in draw_shape()
+
+
+   def draw_shape(self, r=0, g=0, b=0):
+       """
+       Draws the shape using turtle graphics.
+
+
+       :param r, g, b: Color values for the shape (0–255)
+       """
+       # Set up turtle
+       self.turtley = turtle.Turtle()
+       self.turtley.hideturtle()
+       self.turtley.speed(0)  # Fastest drawing
+       turtle.colormode(255)
+       self.turtley.color(r, g, b)
+
+
+       # Go to the start point
+       self.turtley.penup()
+       self.turtley.goto(self.start_point.x, self.start_point.y)
+       self.turtley.pendown()
+
+
+       # Exterior angle formula
+       turn_angle = 360 / self.num_sides
+
+
+       # Draw the polygon
+       for _ in range(self.num_sides):
+           self.turtley.forward(self.side_length)
+           self.turtley.left(turn_angle)
+#############################################################################################################
