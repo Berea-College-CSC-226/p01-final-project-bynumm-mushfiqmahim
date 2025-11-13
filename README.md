@@ -18,8 +18,7 @@
 **Purpose**: `Create an interactive, object-oriented snake game where the snake grows with each food item, navigates 
 obstacles, and ends the game upon boundary, self-, or obstacle-collision.`
 
-**Source Assignment(s)**: `T11: The Legend of Tuna: Breath of Catnip, T12: Events and GUIs, T10: Intro to Classes, 
-HW11: Top Down Design`
+**Source Assignment(s)**: `T11: The Legend of Tuna: Breath of Catnip, T12: Events and GUIs, T10: Intro to Classes`
 
 ❗️**CRC Card(s)**:
   - Create a CRC card for each class that your project will implement.
@@ -38,7 +37,7 @@ branch) as they work. When you need to bring each others branches together, do s
 into your own, following the process we've discussed in previous assignments, then re-branching out from the merged code.  
 
 ```
-    Branch 1 starting name: ____________
+    Branch 1 starting name: mushfiqmahim-P01-Final-Project
     Branch 2 starting name: _____________
 ```
 
