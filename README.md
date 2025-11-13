@@ -31,7 +31,7 @@ HW11: Top Down Design`
   
 ![Don't leave me in your README!](image/crc.png "Image of CRC card as an example. Upload your CRC card(s) in place of this one. ")
 
-❗️**Branches**: This project will **require** effective use of git. 
+**Branches**: This project will **require** effective use of git. 
 
 ❗Each partner should create a branch at the beginning of the project, and stay on this branch (or branches of their 
 branch) as they work. When you need to bring each others branches together, do so by merging each other's branches 
