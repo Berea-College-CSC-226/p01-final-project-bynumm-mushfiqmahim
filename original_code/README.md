@@ -339,4 +339,798 @@ class Player(pygame.sprite.Sprite):
             self.rect.move_ip(-3, 0)
 ####################################################################################
 ### T12: Events and GUIs
+T12_dna_graphics.py
+######################################################################
+# Authors: Scott Heggen       TODO: Change this to your name
+# Username: heggens           TODO: Change this to your username
+#
+# T12: Events and GUIs
+#
+# Purpose: Show interactive DNA strand copying using the turtle library.
+#  This program also uses both mouse click and keypress event handling.
+#  The mouse click causes the complementary nucleotides to appear under
+#  the base that the user clicks on in the DNA strand.
+# ######################################################################
+# Acknowledgements:
+#
+# Original code written by Dr. Mario Nakazawa
+# Previously modified by Scott Heggen and Brian Schack
+#
+# licensed under a Creative Commons
+# Attribution-Noncommercial-Share Alike 3.0 United States License.
+####################################################################################
 
+
+import turtle, random
+
+
+# Global variables which will be used throughout the program.
+global nucleotides
+nucleotides = {"A": "pink", "T": "green", "C": "magenta", "G": "yellow"}
+
+
+global complement
+complement = {"T": "A", "A": "T", "G": "C", "C": "G"}
+
+
+global max_bases                # We'll be using this variable inside an event handler, so it needs global scope
+max_bases = 4
+
+
+
+
+def draw_scaffold():
+   """
+   Create the top and bottom scaffold for the nucleotides
+   to be added afterwards.
+
+
+   :return: None
+   """
+
+
+   dna_protein = turtle.Turtle()
+   dna_protein.hideturtle()
+   dna_protein.shape("square")
+   dna_protein.penup()
+   dna_protein.setpos(-260,230)
+   dna_protein.pendown()
+   dna_protein.pensize(20)
+   dna_protein.forward(500)
+
+
+   dna_protein.penup()
+   dna_protein.setpos(-260,-42)
+   dna_protein.pendown()
+   dna_protein.pensize(20)
+   dna_protein.forward(500)
+
+
+   dna_protein.penup()
+   dna_protein.setpos(0,-170)
+   dna_protein.write("Click on the black square for each nucleotide \nin the DNA strand created at the top\nto get the complement in the strand at the bottom!\n\nPress 'q' to quit.", move=False,align='center',font=("Arial",15,("bold","normal")))
+
+
+
+
+def draw_random_DNA(current_base_turtle, base_index, letter):
+   """
+   Draw a random sequence to be used later to create the complementary base pair.
+
+
+   :param current_base_turtle: a turtle object
+   :param base_index: an index, to help position the turtle
+   :param letter: the letter being drawn
+   :return: None
+   """
+   current_base_turtle.penup()
+   current_base_turtle.right(90)
+   current_base_turtle.setpos(-250 + 95*base_index, 230)       # Moves the turtle right the appropriate amount
+   current_base_turtle.pendown()
+   current_base_turtle.shape("square")
+   current_base_turtle.pensize(10)
+   current_base_turtle.forward(50)
+   current_base_turtle.color(nucleotides[letter])
+   current_base_turtle.pensize(30)
+   current_base_turtle.forward(70)
+   current_base_turtle.backward(40)
+   current_base_turtle.color("black")
+
+
+   # draw out the letters for the base_turtles and return back to the center.
+   (xpos, ypos) = current_base_turtle.pos()
+   letter_turtle.setpos(xpos, ypos+5 )
+   letter_turtle.write(letter,move=False,align='center',font=("Arial",25,("bold","normal")))
+   letter_turtle.setpos(0,0)
+
+
+
+
+def draw_complement(letter, x, y):
+       """
+       Draws the complement strand for a given letter at the correct location.
+
+
+       :param letter: the base letter
+       :param x: the mouse x-coordinate
+       :param y: the mouse y-coordinate
+       :return: None
+       """
+       pair_turtle = turtle.Turtle()
+       pair_turtle.hideturtle()
+       pair_turtle.penup()
+       pair_turtle.goto(x, y)
+       pair_turtle.right(90)
+       pair_turtle.forward(190)
+       pair_turtle.pendown()
+       pair_turtle.color("black")
+       pair_turtle.pensize(10)
+       pair_turtle.back(50)
+       pair_turtle.color(nucleotides[complement[letter]])          # sets the color to the complement's color
+       pair_turtle.pensize(30)
+
+
+       (x_pos, y_pos) = pair_turtle.pos()
+
+
+       pair_turtle.back(70)
+       pair_turtle.penup()
+
+
+       # draw the letter for that base
+       letter_turtle.setpos(x_pos, y_pos - 10)
+       letter_turtle.write(complement[letter], move=False, align='center', font=("Arial", 25, ("bold", "normal")))
+       letter_turtle.setpos(0, 0)
+
+
+       # Resets stuff
+       pair_turtle.back(70)
+       pair_turtle.showturtle()
+       pair_turtle.color("black")
+
+
+
+
+def base_handler(x, y):
+   """
+   Event handler for clicks on turtles.
+   Draws the complement strand.
+   Each turtle reuses this handler.
+
+
+   :param x: x-coordinate of the mouse
+   :param y: y-coordinate of the mouse
+   :return: None
+   """
+   global current_letter
+   global current_base
+
+
+   draw_complement(current_letter, x, y)           # Draw the complement strand
+   current_base += 1
+   if current_base <= max_bases:
+       # Repeat the program up to four times. Creates a new letter, new turtle, and reuses the click handler base_handler
+       current_letter = random.choice(list(nucleotides.keys()))
+       base_turtle = turtle.Turtle()
+       draw_random_DNA(base_turtle, current_base, current_letter)
+       base_turtle.onclick(base_handler)
+
+
+
+
+def main():
+   """
+   Interactive DNA sequence drawing program.
+
+
+   :return: None
+   """
+   global letter_turtle            # We'll be using this variable inside an event handler, so it needs global scope
+   global current_base             # We'll be using this variable inside an event handler, so it needs global scope
+   global current_letter           # We'll be using this variable inside an event handler, so it needs global scope
+
+
+   letter_turtle = turtle.Turtle()
+   letter_turtle.hideturtle()
+   letter_turtle.penup()
+
+
+   draw_scaffold()
+
+
+   current_base = 1
+   current_letter = random.choice(list(nucleotides.keys()))        # Picks a random letter from the dictionary keys
+   base_turtle = turtle.Turtle()
+
+
+   draw_random_DNA(base_turtle, current_base, current_letter)      # Draws a random DNA
+
+
+   base_turtle.onclick(base_handler)       # Binds the first turtle to the base_handler event handler
+
+
+   # It's not common, but sometimes useful to define functions within other functions.
+   def quit_program():
+       """
+       Event handler for quitting the program
+
+
+       :return: None
+       """
+       wn.bye()
+
+
+   wn = turtle.Screen()
+   wn.onkey(quit_program, "q")     # Binds to the quit_program event handler above
+   wn.listen()                     # Needed to capture events
+   wn.mainloop()                   # Keeps the program running
+
+
+
+
+main()
+
+t12_dna_graphics_without_classes.py
+
+######################################################################
+# Authors: Scott Heggen       TODO: Change this to your name
+# Username: heggens           TODO: Change this to your username
+#
+# T12: Events and GUIs
+#
+# Purpose: Show interactive DNA strand copying using the turtle library.
+#  This program also uses both mouse click and keypress event handling.
+#  The mouse click causes the complementary nucleotides to appear under
+#  the base that the user clicks on in the DNA strand.
+# ######################################################################
+# Acknowledgements:
+#
+# Original code written by Dr. Mario Nakazawa
+# Previously modified by Scott Heggen and Brian Schack
+#
+# licensed under a Creative Commons
+# Attribution-Noncommercial-Share Alike 3.0 United States License.
+####################################################################################
+
+
+import turtle
+import random
+
+
+
+
+class DNADraw:
+   # Class variables which will be used throughout the program.
+   nucleotides = {"A": "pink", "T": "green", "C": "magenta", "G": "yellow"}
+   complement = {"T": "A", "A": "T", "G": "C", "C": "G"}
+   max_bases = 4
+  
+   def __init__(self):
+       self.letter_turtle = turtle.Turtle()
+       self.letter_turtle.hideturtle()
+       self.letter_turtle.penup()
+  
+       self.draw_scaffold()
+  
+       self.current_base = 1
+       self.current_letter = random.choice(list(self.nucleotides.keys()))        # Picks a random letter from the dictionary keys
+       self.base_turtle = turtle.Turtle()
+  
+       self.draw_random_DNA()      # Draws a random DNA
+  
+       self.base_turtle.onclick(self.base_handler)       # Binds the first turtle to the base_handler event handler
+
+
+       self.wn = turtle.Screen()
+       self.wn.onkey(self.quit_program, "q")     # Binds to the quit_program event handler above
+       self.wn.listen()                          # Needed to capture events
+       self.wn.mainloop()                        # Keeps the program running
+
+
+   def quit_program(self):
+           """
+           Event handler for quitting the program.
+
+
+           :return: None
+           """
+           self.wn.bye()
+
+
+   def draw_scaffold(self):
+       """
+       Create the top and bottom scaffold for the nucleotides
+       to be added afterwards.
+  
+       :return: None
+       """
+
+
+       dna_protein = turtle.Turtle()
+       dna_protein.hideturtle()
+       dna_protein.shape("square")
+       dna_protein.penup()
+       dna_protein.setpos(-260,230)
+       dna_protein.pendown()
+       dna_protein.pensize(20)
+       dna_protein.forward(500)
+  
+       dna_protein.penup()
+       dna_protein.setpos(-260,-42)
+       dna_protein.pendown()
+       dna_protein.pensize(20)
+       dna_protein.forward(500)
+  
+       dna_protein.penup()
+       dna_protein.setpos(0,-170)
+       dna_protein.write("Click on the black square for each nucleotide \nin the DNA strand created at the top\nto get the complement in the strand at the bottom!\n\nPress 'q' to quit.", move=False,align='center',font=("Arial",15,("bold","normal")))
+
+
+   def draw_random_DNA(self):
+       """
+       Draw a random sequence to be used later to create he complementary base pair
+
+
+       :return: None
+       """
+       self.base_turtle.penup()
+       self.base_turtle.right(90)
+       self.base_turtle.setpos(-250 + 95 * self.current_base, 230)
+       self.base_turtle.pendown()
+       self.base_turtle.shape("square")
+       self.base_turtle.pensize(10)
+       self.base_turtle.forward(50)
+       self.base_turtle.color(self.nucleotides[self.current_letter])
+       self.base_turtle.pensize(30)
+       self.base_turtle.forward(70)
+       self.base_turtle.backward(40)
+       self.base_turtle.color("black")
+  
+       # draw out the letters for the base_turtles and return back to the center.
+       (xpos, ypos) = self.base_turtle.pos()
+       self.letter_turtle.setpos(xpos, ypos+5)
+       self.letter_turtle.write(self.current_letter, move=False, align='center',
+                                font=("Arial", 25, ("bold", "normal")))
+       self.letter_turtle.setpos(0,0)
+
+
+   def draw_complement(self, x, y):
+       """
+       Draws the complement strand for a given letter at the correct location
+
+
+       :param x: the mouse x-coordinate
+       :param y: the mouse y-coordinate
+       :return: None
+       """
+       pair_turtle = turtle.Turtle()
+       pair_turtle.hideturtle()
+       pair_turtle.penup()
+       pair_turtle.goto(x, y)
+       pair_turtle.right(90)
+       pair_turtle.forward(190)
+       pair_turtle.pendown()
+       pair_turtle.color("black")
+       pair_turtle.pensize(10)
+       pair_turtle.back(50)
+       # sets the color to the complement's color
+       pair_turtle.color(self.nucleotides[self.complement[self.current_letter]])
+       pair_turtle.pensize(30)
+
+
+       (x_pos, y_pos) = pair_turtle.pos()
+
+
+       pair_turtle.back(70)
+       pair_turtle.penup()
+
+
+       # draw the letter for that base
+       self.letter_turtle.setpos(x_pos, y_pos - 10)
+       self.letter_turtle.write(self.complement[self.current_letter], move=False, align='center',
+                                font=("Arial", 25, ("bold", "normal")))
+       self.letter_turtle.setpos(0, 0)
+
+
+       # Resets stuff
+       pair_turtle.back(70)
+       pair_turtle.showturtle()
+       pair_turtle.color("black")
+
+
+   def base_handler(self, x, y):
+       """
+       Event handler for clicks on turtles.
+       Draws the complement strand.
+       Each turtle reuses this handler.
+  
+       :param x: x-coordinate of the mouse
+       :param y: y-coordinate of the mouse
+       :return: None
+       """
+
+
+       self.draw_complement(x, y)           # Draw the complement strand
+       self.current_base += 1
+       if self.current_base <= self.max_bases:
+           # Repeat the program up to 4x. Creates a new letter, new turtle, and reuses the click handler base_handler
+           self.current_letter = random.choice(list(self.nucleotides.keys()))
+           self.base_turtle = turtle.Turtle()
+           # A better solution here uses a collaboration with a Nucleotide object and spawns new ones,
+           # eliminating the issue from the Google Doc with every nucleotide being clickable.
+           self.draw_random_DNA()
+           self.base_turtle.onclick(self.base_handler)
+
+
+
+
+def main():
+   """
+   Interactive DNA sequence drawing program.
+
+
+   :return: None
+   """
+
+
+   dna = DNADraw()     # Yup. that's it!
+   # DNADraw()           # Technically, this would work also. Why?
+
+
+
+
+main()
+
+T12_onkey_example.py 
+
+import turtle
+
+
+# The next four functions are our "event handlers".
+def h1():
+   tess.forward(30)
+
+
+def h2():
+   tess.left(45)
+
+
+def h3():
+   tess.right(45)
+
+
+def h4():
+   wn.bye()                        # Close down the turtle window
+
+
+def main():
+   global wn
+   global tess
+
+
+   wn = turtle.Screen()                 # Get a reference to the window
+   wn.setup(400,500)                    # Determine the window size
+   wn.title("Handling keypresses!")     # Change the window title
+   wn.bgcolor("lightgreen")             # Set the background color
+
+
+   tess = turtle.Turtle()               # Create our favorite turtle
+
+
+   # These lines "wire up" keypresses to the handlers we've defined.
+   wn.onkey(h1, "Up")
+   wn.onkey(h2, "Left")
+   wn.onkey(h3, "Right")
+   wn.onkey(h4, "q")
+
+
+   # Now we need to tell the window to start listening for events,
+   # If any of the keys that we're monitoring is pressed, its
+   # handler will be called.
+   wn.listen()
+
+
+   wn.mainloop()
+
+
+main()
+
+T12_onkey_example_with_classes.py
+
+######################################################################
+# Author: Scott Heggen     TODO: Change this to your name
+# Username: heggens        TODO: Change this to your username
+#
+# T12: Events and GUIs
+#
+# Purpose: To demonstrate how turtle object responds to key press events.
+#   the up arrow would move the turtle forward
+#   the right arrow would turn the turtle right by 45 degrees
+#   the left arrow would turn the turtle left by 45 degrees
+#   the "q" key would quit the application
+# ######################################################################
+# Acknowledgements:
+#
+#   This code is adapted from http://openbookproject.net/thinkcs/python/english3e/events.html#mouse-events
+#   by Dr. Mario Nakazawa
+#
+# licensed under a Creative Commons
+# Attribution-Noncommercial-Share Alike 3.0 United States License.
+####################################################################################
+
+
+import turtle
+
+
+class DrivenTurtle:
+   def __init__(self):
+       self.wn = turtle.Screen()      # Get a reference to the window
+       self.turt = turtle.Turtle()    # Create our favorite turtle
+
+
+       self.wn.setup(400, 500)  # Determine the window size
+       self.wn.title("Handling keypresses!")  # Change the window title
+       self.wn.bgcolor("lightgreen")  # Set the background color
+
+
+       # These lines "wire up" keypresses to the handlers we've defined.
+       self.wn.onkey(self.h1, "Up")
+       self.wn.onkey(self.h2, "Left")
+       self.wn.onkey(self.h3, "Right")
+       self.wn.onkey(self.h4, "q")
+
+
+       # Now we need to tell the window to start listening for events,
+       # If any of the keys that we're monitoring is pressed, its
+       # handler will be called.
+       self.wn.listen()
+       self.wn.mainloop()
+
+
+   def h1(self):
+       self.turt.forward(30)
+
+
+   def h2(self):
+       self.turt.left(45)
+
+
+   def h3(self):
+       self.turt.right(45)
+
+
+   def h4(self):
+       self.wn.bye()                        # Close down the turtle window
+
+
+def main():
+   h = DrivenTurtle()  # Make an instance of the class DrivenTurtle
+
+
+main()
+
+T12_tkinter.py
+
+######################################################################
+# Author: Scott Heggen     TODO: Change this to your name
+# Username: heggens        TODO: Change this to your username
+#
+# T12: Events and GUIs
+#
+# Purpose: To explore the Tkinter module for making a GUI
+#
+# A GUI widget is a graphical component such as a button, text label as shown below.
+# GUI widgets also exist to make drop-down menus and scroll bars, display images, etc...
+# Tkinter gives you the ability to create GUI Windows containing widgets.
+# This program is a simple exploration.
+#######################################################################
+# Acknowledgements:
+#
+# Original code written by Dr. Jan Pearce, modified by Dr. Scott Heggen
+#
+# licensed under a Creative Commons
+# Attribution-Noncommercial-Share Alike 3.0 United States License.
+####################################################################################
+
+
+import tkinter as tk       # Python's most commonly used GUI package.
+
+
+
+
+class MyTkinterApp:
+   def __init__(self, windowtext="Exploring Tkinter"):
+       """
+       The initializer creates a window to contain the widgets
+
+
+       :param windowtext: The text at the top of the window title
+       """
+       self.root = tk.Tk()                         # Create the root window where all widgets go
+       self.root.minsize(width=250, height=100)    # Sets the window's minimum size
+       self.root.maxsize(width=250, height=100)    # Sets the window's maximum size
+       self.root.title(windowtext)                 # Sets root window title
+
+
+       self.count = 0                              # Click counter for myButton1
+       # self.myButton1 = None
+       # self.myTextLabel1 = None
+       self.create_GUI()
+
+
+   def create_GUI(self):
+       # Note that when myButton1 button is pushed, self.button1handler is called
+       self.myButton1 = tk.Button(self.root, text="What is your name?", command=self.button1_handler)
+       self.myButton1.pack()                       # pack means add to window
+
+
+       self.myTextBox1 = tk.Entry(self.root)
+       self.myTextBox1.pack()
+
+
+       self.myTextLabel1Text = tk.StringVar()      # Makes a Tkinter string variable
+       self.myTextLabel1Text.set("")               # Sets the Tkinter string variable
+       self.myTextLabel1 = tk.Label(self.root, textvariable=self.myTextLabel1Text)
+       self.myTextLabel1.pack()
+
+
+   def button1_handler(self):
+       """
+       Event handler for myButton1 above.
+       Gets the text from the textbox and writes in myTextLabel1
+
+
+       :return: None
+       """
+       txt = self.myTextBox1.get()                 # Retrieves the text entered by the user
+       self.count += 1                             # increments each time the handler is called (button is pressed)
+       if self.count % 10 == 0:
+           message = "Wow, {1} clicks! Keep it up, {0}!".format(txt, self.count)
+       else:
+           message = "Hey {0}, click it again!\nYou have clicked the button {1} times.".format(txt, self.count)
+       self.myTextLabel1Text.set(message)
+
+
+def main():
+   """
+   Creates GUI and uses button, textbox and label GUI widgets
+
+
+   :return: None
+   """
+
+
+   gooey = MyTkinterApp("CSC226 Hello GUI")           # Create a new myTkinter object
+   gooey.root.mainloop()                           # Needed to start the event loop
+
+
+if __name__ == "__main__":
+   main()
+
+T12_turtle_interactive.py
+
+######################################################################
+# Author: Scott Heggen     TODO: Change this to your name
+# Username: heggens        TODO: Change this to your username
+#
+# T12: Events and GUIs
+#
+# Purpose: To demonstrate how turtle object responds to mouse click events.
+# ######################################################################
+# Acknowledgements:
+#
+#   This code is adapted from:
+#   http://openbookproject.net/thinkcs/python/english3e/events.html#mouse-events
+#   by Dr. Mario Nakazawa
+#
+# licensed under a Creative Commons
+# Attribution-Noncommercial-Share Alike 3.0 United States License.
+####################################################################################
+
+
+import turtle
+
+
+
+
+def h1(x, y):
+   """
+   Event handler for mouse click events
+
+
+   :param x: x coordinate of the mouse on the screen
+   :param y: y coordinate of the mouse on the screen
+   :return: None
+   """
+   tess.goto(x, y)
+
+
+
+
+def main():
+   """
+   Simple program for demonstrating mouse click events
+
+
+   :return: None
+   """
+   global tess
+   tess = turtle.Turtle()
+
+
+   wn = turtle.Screen()
+   wn.setup(400,500)
+   wn.title("How to handle mouse clicks on the window!")
+   wn.bgcolor("lightgreen")
+
+
+   tess.color("purple")
+   tess.pensize(3)
+   tess.shape("circle")
+
+
+   # NOTICE that the screen is responding to the click events!
+   wn.onclick(h1)      # Wire up a click handler to the window.
+
+
+   wn.mainloop()
+
+
+
+
+main()
+
+T12_turtle_interactive_with_class.py
+
+######################################################################
+# Author: Scott Heggen     TODO: Change this to your name
+# Username: heggens        TODO: Change this to your username
+#
+# T12: Events and GUIs
+#
+# Purpose: To demonstrate how turtle object responds to mouse click events.
+# ######################################################################
+# Acknowledgements:
+#
+#   This code is adapted from http://openbookproject.net/thinkcs/python/english3e/events.html#mouse-events
+#   by Dr. Scott Heggen
+#
+# licensed under a Creative Commons
+# Attribution-Noncommercial-Share Alike 3.0 United States License.
+####################################################################################
+
+
+import turtle
+
+
+class ClickyTurtle:
+   def __init__(self):
+       self.wn = turtle.Screen()
+       self.wn.setup(400,500)
+       self.wn.title("How to handle mouse clicks on the window!")
+       self.wn.bgcolor("lightgreen")
+       self.tess = turtle.Turtle()
+       self.tess.color("purple")
+       self.tess.pensize(3)
+       self.tess.shape("circle")
+
+
+       # NOTICE that the screen is responding to the click events!
+       self.wn.onclick(self.h1)      # Wire up a click handler to the window.
+
+
+       self.wn.mainloop()
+
+
+   def h1(self, x, y):
+       self.tess.goto(x, y)
+
+
+def main():
+   c = ClickyTurtle()
+
+
+main()
+#####################################################################################################
+T10: Intro to Classes
+#####################################################################################################
