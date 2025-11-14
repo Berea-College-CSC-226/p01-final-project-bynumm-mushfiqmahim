@@ -38,7 +38,7 @@ into your own, following the process we've discussed in previous assignments, th
 
 ```
     Branch 1 starting name: mushfiqmahim-P01-Final-Project
-    Branch 2 starting name: BynumM
+    Branch 2 starting name: BynumM 
 ```
 
 ### References 
