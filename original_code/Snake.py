@@ -14,13 +14,8 @@ import pygame
 import random
 import keyboard
 
-
-
-
-#Screen and Layout
 class Game:
-    def __init__(self):
-        """Game class for handling the game logic."""
+    def __init__(self): #Designing the screen
         pygame.init()
         self.size = (800, 600)
         self.screen = pygame.display.set_mode(self.size)
@@ -32,22 +27,25 @@ class Game:
 
 
 #Created the player snake
-class Snake:
+def snake():
 
-#The movement of the snake, when the snake eats (touches the food) it will grow, and
-class Movement:
+#The movement of the snake, when the snake eats (touches the food) it will grow, and movement:
 
     #use arrow keys for the movement of the snake
 
 
 #Create the food and establish random places the food goes on the screen
-class Food:
+def food():
+
+
+
+def movement():
 
 
 
 
-def main
 
+ def main():
 
-
-    main()
+    if __name__ == "__main__":
+        main()
