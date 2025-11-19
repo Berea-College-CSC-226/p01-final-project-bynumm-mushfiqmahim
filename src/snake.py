@@ -27,19 +27,19 @@ class Snake:
         """
         Moves the snake by adding a new head and removing tail.
         """
-        # TODO: implement movement logic
+        ###TO DO: implement movement logic
         pass
 
     def grow(self):
         """
         Makes the snake longer by not removing the tail segment during movement.
         """
-        # TODO: implement growth logic
+        ### TO DO: implement growth logic
         pass
 
     def draw(self, screen):
         """
         Draws the snake on the screen.
         """
-        # TODO: draw each segment as a rectangle
+        ### TO DO: draw each segment as a rectangle
         pass
