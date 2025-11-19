@@ -15,7 +15,7 @@ class Obstacle:
         """
         Draws the obstacle.
         """
-        # TODO: draw a rectangle or image for obstacle
+        ### TO DO: draw a rectangle or image for obstacle
         pass
 
     def get_rect(self):
