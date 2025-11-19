@@ -29,7 +29,7 @@ obstacles, and ends the game upon boundary, self-, or obstacle-collision.`
     and REPLACE it with your own:
   
 ![Don't leave me in your README!](image/attributesCRC.png "CRC attribute's card")
-![Don't leave me in your README!](image/methodsCRC.png "CRC method's card")
+![Don't leave me in your README!](image/methodsCRC.png "CRC method's card") 
 
 **Branches**: This project will **require** effective use of git. 
 
