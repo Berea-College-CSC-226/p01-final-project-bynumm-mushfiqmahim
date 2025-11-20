@@ -53,13 +53,21 @@ section as you go. DO NOT forget about it!
 
 ## Milestone 2: Code Setup and Issue Queue
 
-❗Most importantly, keep your issue queue up to date, and focus on your code. 🙃
+Most importantly, keep your issue queue up to date, and focus on your code. 🙃
 
-❗Reflect on what you’ve done so far. How’s it going? Are you feeling behind/ahead? What are you worried about? 
+Reflect on what you’ve done so far. How’s it going? Are you feeling behind/ahead? What are you worried about? 
 What has surprised you so far? Describe your general feelings. Be honest with yourself; this section is for you, not me.
 
 ```
-    **Replace this text with your reflection
+    We were worried at first because setting up the new files and managing branches felt confusing, but once we got into 
+    the workflow it started to make more sense. Creating the project structure, writing stubbed-out functions, solving 
+    an issue, and merging into the main branch all helped us feel more confident in using Git collaboratively. We were 
+    also surprised by how important the issue queue is for keeping the project organized—it actually helped us understand 
+    what steps we need to take next. Right now, we feel slightly behind in terms of how much code is implemented, but 
+    ahead in terms of project structure and organization. Our biggest worry is coordinating commits with each other so 
+    the work is evenly balanced and merged correctly. Still, we feel good that we have a solid foundation and that the 
+    basic game loop and snake movement are already working. We are feeling more confident with the project now than 
+    when we started, and we think we’re moving in the right direction.
 ```
 
 ---
