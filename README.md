@@ -67,7 +67,7 @@ What has surprised you so far? Describe your general feelings. Be honest with yo
     ahead in terms of project structure and organization. Our biggest worry is coordinating commits with each other so 
     the work is evenly balanced and merged correctly. Still, we feel good that we have a solid foundation and that the 
     basic game loop and snake movement are already working. We are feeling more confident with the project now than 
-    when we started, and we think we’re moving in the right direction.
+    when we started, and we think we’re moving in the right direction. 
 ```
 
 ---
