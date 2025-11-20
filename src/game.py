@@ -42,6 +42,7 @@ class Game:
 
     def update(self):
         """Updates all game objects."""
+        self.snake.move()
         ####To Do - update the snake, food, and obstacles
         pass
 
@@ -50,7 +51,7 @@ class Game:
         self.screen.fill((0, 0, 0))  # for now, it's just black background
 
         ####To Do - draw snake, food, obstacles, scoreboard
-        # self.snake.draw(self.screen)
+        self.snake.draw(self.screen)
         # self.food.draw(self.screen)
         # for obs in self.obstacles:
         #     obs.draw(self.screen)

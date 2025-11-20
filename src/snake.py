@@ -24,10 +24,27 @@ class Snake:
         self.direction = new_direction
 
     def move(self):
+
         """
-        Moves the snake by adding a new head and removing tail.
-        """
-        ###TO DO: implement movement logic
+           Moves the snake by adding a new head and removing the last tail segment.
+           Uses the current direction tuple (dx, dy).
+           Ensures movement stays aligned to the block grid.
+           """
+
+        # Current head position
+        head_x, head_y = self.segments[0]
+
+        # Direction movement
+        dx, dy = self.direction
+
+        # New head (move one block)
+        new_head = (head_x + dx, head_y + dy)
+
+        # Add new head to the front of the list
+        self.segments.insert(0, new_head)
+
+        # Remove the last segment (tail) to keep same length
+        self.segments.pop()
         pass
 
     def grow(self):
@@ -39,7 +56,14 @@ class Snake:
 
     def draw(self, screen):
         """
-        Draws the snake on the screen.
+        Draws the snake on the screen as green blocks.
         """
-        ### TO DO: draw each segment as a rectangle
+        for (x, y) in self.segments:
+            rect = pygame.Rect(x, y, self.block_size, self.block_size)
+            pygame.draw.rect(screen, (0, 255, 0), rect)
         pass
+
+    def check_self_collision(self):
+        """Check if the snake ran into itself."""
+        pass
+
