@@ -20,7 +20,7 @@ obstacles, and ends the game upon boundary, self-, or obstacle-collision.`
 
 **Source Assignment(s)**: `T11: The Legend of Tuna: Breath of Catnip, T12: Events and GUIs, T10: Intro to Classes`
 
-️**CRC Card(s)**:
+❗️**CRC Card(s)**:
   - Create a CRC card for each class that your project will implement. 
   - See this link for a sample CRC card and a template to use for your own cards (you will have to make a copy to edit):
     [CRC Card Example](https://docs.google.com/document/d/1JE_3Qmytk_JGztRqkPXWACJwciPH61VCx3idIlBCVFY/edit?usp=sharing)
@@ -28,24 +28,22 @@ obstacles, and ends the game upon boundary, self-, or obstacle-collision.`
     README. You can do this by saving an image in the repository and linking to it. See the sample CRC card below - 
     and REPLACE it with your own:
   
-![Don't leave me in your README!](image/attributesCRC.png "CRC attribute's card")
-![Don't leave me in your README!](image/methodsCRC.png "CRC method's card")
-
+![Don't leave me in your README!](image/crc.png "Image of CRC card as an example. Upload your CRC card(s) in place of this one. ")
 
 **Branches**: This project will **require** effective use of git. 
 
-Each partner should create a branch at the beginning of the project, and stay on this branch (or branches of their 
+❗Each partner should create a branch at the beginning of the project, and stay on this branch (or branches of their 
 branch) as they work. When you need to bring each others branches together, do so by merging each other's branches 
 into your own, following the process we've discussed in previous assignments, then re-branching out from the merged code.  
 
 ```
     Branch 1 starting name: mushfiqmahim-P01-Final-Project
-    Branch 2 starting name: BynumM 
+    Branch 2 starting name: BynumM
 ```
 
 ### References 
 
-Throughout this project, you will likely use outside resources. Reference all ideas which are not your own, 
+❗Throughout this project, you will likely use outside resources. Reference all ideas which are not your own, 
 and describe how you integrated the ideas or code into your program. This includes online sources, people who have 
 helped you, AI tools you've used, and any other resources that are not solely your own contribution. Update this 
 section as you go. DO NOT forget about it!
