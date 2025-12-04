@@ -13,13 +13,14 @@ class Obstacle:
 
     def draw(self, screen):
         """
-        Draws the obstacle.
+        Draws the obstacle as a gray block.
         """
-        ### TO DO: draw a rectangle or image for obstacle
-        pass
+        rect = pygame.Rect(self.x, self.y, self.size, self.size)
+        pygame.draw.rect(screen, (100, 100, 100), rect)  # gray block
 
     def get_rect(self):
         """
         Returns a pygame.Rect for collision detection.
         """
         return pygame.Rect(self.x, self.y, self.size, self.size)
+

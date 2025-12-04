@@ -22,10 +22,17 @@ class Game:
         # Clock for controlling FPS
         self.clock = pygame.time.Clock()
 
-    ####To Do - create objects
+        # create objects
         self.snake = Snake()
         self.food = Food()
-        self.obstacles = []          # list of Obstacle objects
+
+        # create some example obstacles (grid-aligned)
+        self.obstacles = [
+            Obstacle(200, 200),
+            Obstacle(220, 200),
+            Obstacle(240, 200),
+        ]
+
         # self.scoreboard = Scoreboard()
 
         self.running = True
@@ -36,26 +43,39 @@ class Game:
             if event.type == pygame.QUIT:
                 self.running = False
 
-            #####To Do - need to add movement controls later (MJ)
-            # if event.type == pygame.KEYDOWN:
-            #     pass
+            # basic movement controls for the snake
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    self.running = False
+                elif event.key == pygame.K_UP:
+                    self.snake.change_direction((0, -20))
+                elif event.key == pygame.K_DOWN:
+                    self.snake.change_direction((0, 20))
+                elif event.key == pygame.K_LEFT:
+                    self.snake.change_direction((-20, 0))
+                elif event.key == pygame.K_RIGHT:
+                    self.snake.change_direction((20, 0))
 
     def update(self):
         """Updates all game objects."""
+        # move the snake each frame
         self.snake.move()
-        ####To Do - update the snake, food, and obstacles
-        pass
+
+        # later: check collisions with food, walls, obstacles, etc.
+        # e.g. check if snake hits obstacle or eats food
+        # this is left as future work for another issue
 
     def draw(self):
         """Draws everything to the screen."""
-        self.screen.fill((0, 0, 0))  # for now, it's just black background
+        # clear screen
+        self.screen.fill((0, 0, 0))  # black background
 
-        ####To Do - draw snake, food, obstacles, scoreboard
+        # draw snake, food, and obstacles
         self.snake.draw(self.screen)
-        # self.food.draw(self.screen)
-        # for obs in self.obstacles:
-        #     obs.draw(self.screen)
-        # self.scoreboard.draw(self.screen)
+        self.food.draw(self.screen)
+        for obs in self.obstacles:
+            obs.draw(self.screen)
+        # later: draw scoreboard here
 
         pygame.display.flip()
 
