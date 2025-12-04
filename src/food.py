@@ -19,7 +19,6 @@ class Food:
         """
         Places food at a new random position.
         """
-        ### TO DO: maybe check that food doesn't spawn on snake
         self.x = random.randrange(0, self.width, self.block_size)
         self.y = random.randrange(0, self.height, self.block_size)
 
@@ -27,5 +26,5 @@ class Food:
         """
         Draws the food on the screen.
         """
-        ### TO DO: draw a simple rectangle for food
-        pass
+        rect = pygame.Rect(self.x, self.y, self.block_size, self.block_size)
+        pygame.draw.rect(screen, (255, 0, 0), rect)

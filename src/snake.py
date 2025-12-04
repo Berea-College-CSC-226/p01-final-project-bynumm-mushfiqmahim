@@ -20,17 +20,15 @@ class Snake:
         Changes direction of the snake.
         new_direction is a tuple (dx, dy)
         """
-        ###TO Do - need to add logic to prevent reversing directly
+        # TO DO: add logic to prevent reversing directly
         self.direction = new_direction
 
     def move(self):
-
         """
-           Moves the snake by adding a new head and removing the last tail segment.
-           Uses the current direction tuple (dx, dy).
-           Ensures movement stays aligned to the block grid.
-           """
-
+        Moves the snake by adding a new head and removing the last tail segment.
+        Uses the current direction tuple (dx, dy).
+        Ensures movement stays aligned to the block grid.
+        """
         # Current head position
         head_x, head_y = self.segments[0]
 
@@ -45,13 +43,12 @@ class Snake:
 
         # Remove the last segment (tail) to keep same length
         self.segments.pop()
-        pass
 
     def grow(self):
         """
         Makes the snake longer by not removing the tail segment during movement.
         """
-        ### TO DO: implement growth logic
+        # TO DO: implement growth logic
         pass
 
     def draw(self, screen):
@@ -61,9 +58,20 @@ class Snake:
         for (x, y) in self.segments:
             rect = pygame.Rect(x, y, self.block_size, self.block_size)
             pygame.draw.rect(screen, (0, 255, 0), rect)
-        pass
 
     def check_self_collision(self):
         """Check if the snake ran into itself."""
+        # TO DO: implement self-collision logic later
         pass
 
+    def is_out_of_bounds(self, width, height):
+        """Return True if snake head goes outside the game window."""
+        head_x, head_y = self.segments[0]
+
+        # check left, right, top, bottom boundaries
+        if head_x < 0 or head_x >= width:
+            return True
+        if head_y < 0 or head_y >= height:
+            return True
+
+        return False

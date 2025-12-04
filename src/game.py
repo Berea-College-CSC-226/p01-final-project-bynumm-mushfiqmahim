@@ -58,12 +58,15 @@ class Game:
 
     def update(self):
         """Updates all game objects."""
-        # move the snake each frame
+        # move the snake
         self.snake.move()
 
-        # later: check collisions with food, walls, obstacles, etc.
-        # e.g. check if snake hits obstacle or eats food
-        # this is left as future work for another issue
+        # end the game if the snake hits the wall
+        if self.snake.is_out_of_bounds(self.width, self.height):
+            print("Game Over: Snake hit the wall!")
+            self.running = False
+
+        # later: update food, obstacles, collisions, etc.
 
     def draw(self):
         """Draws everything to the screen."""
