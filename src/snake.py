@@ -15,6 +15,9 @@ class Snake:
         # Movement direction (dx, dy)
         self.direction = (20, 0)  # moving right initially
 
+        # How many growth steps are pending
+        self.grow_pending = 0
+
     def change_direction(self, new_direction):
         """
         Changes direction of the snake.
@@ -27,7 +30,7 @@ class Snake:
         """
         Moves the snake by adding a new head and removing the last tail segment.
         Uses the current direction tuple (dx, dy).
-        Ensures movement stays aligned to the block grid.
+        If grow_pending > 0, the tail is NOT removed, so the snake grows.
         """
         # Current head position
         head_x, head_y = self.segments[0]
@@ -41,15 +44,18 @@ class Snake:
         # Add new head to the front of the list
         self.segments.insert(0, new_head)
 
-        # Remove the last segment (tail) to keep same length
-        self.segments.pop()
+        # If we still need to grow, keep the tail (no pop)
+        if self.grow_pending > 0:
+            self.grow_pending -= 1
+        else:
+            # Remove the last segment (tail) to keep same length
+            self.segments.pop()
 
     def grow(self):
         """
-        Makes the snake longer by not removing the tail segment during movement.
+        Makes the snake longer by one block on the next move.
         """
-        # TO DO: implement growth logic
-        pass
+        self.grow_pending += 1
 
     def draw(self, screen):
         """
@@ -75,3 +81,9 @@ class Snake:
             return True
 
         return False
+
+    def get_head_rect(self):
+        """Return a pygame.Rect for the snake's head (for collision checks)."""
+        head_x, head_y = self.segments[0]
+        return pygame.Rect(head_x, head_y, self.block_size, self.block_size)
+
