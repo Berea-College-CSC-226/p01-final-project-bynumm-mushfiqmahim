@@ -20,7 +20,7 @@ obstacles, and ends the game upon boundary, self-, or obstacle-collision.`
 
 **Source Assignment(s)**: `T11: The Legend of Tuna: Breath of Catnip, T12: Events and GUIs, T10: Intro to Classes`
 
-❗️**CRC Card(s)**:
+**CRC Card(s)**:
   - Create a CRC card for each class that your project will implement. 
   - See this link for a sample CRC card and a template to use for your own cards (you will have to make a copy to edit):
     [CRC Card Example](https://docs.google.com/document/d/1JE_3Qmytk_JGztRqkPXWACJwciPH61VCx3idIlBCVFY/edit?usp=sharing)
@@ -33,7 +33,7 @@ obstacles, and ends the game upon boundary, self-, or obstacle-collision.`
 
 **Branches**: This project will **require** effective use of git. 
 
-❗Each partner should create a branch at the beginning of the project, and stay on this branch (or branches of their 
+Each partner should create a branch at the beginning of the project, and stay on this branch (or branches of their 
 branch) as they work. When you need to bring each others branches together, do so by merging each other's branches 
 into your own, following the process we've discussed in previous assignments, then re-branching out from the merged code.  
 
@@ -74,16 +74,26 @@ What has surprised you so far? Describe your general feelings. Be honest with yo
 
 ## Milestone 3: Virtual Check-In
 
-❗Indicate what percentage of the project you have left to complete and how confident you feel. 
+Indicate what percentage of the project you have left to complete and how confident you feel. 
 
-❗️**Completion Percentage**: `0 - 100%`
+**Completion Percentage**: `65%`
 
-❗️**Confidence**: Describe how confident you feel about completing this project, and why. Then, describe some 
+**Confidence**: Describe how confident you feel about completing this project, and why. Then, describe some 
   strategies you can employ to increase the likelihood that you'll be successful in completing this project 
   before the deadline.
 
 ```
-    **Replace this with your reflection
+    I feel moderately confident about completing this project on time. The core framework of the game is already built —
+    the game loop, movement, obstacles, game-over screen, and restart/quit flow are working correctly. The next features, 
+    such as scoring, food collision logic, improving gameplay, and writing initial tests, are very manageable. My biggest 
+    concern is making sure all features integrate cleanly and that both partners contribute enough for the final grading 
+    requirements. Now that the structure is set up, adding new features should be much easier and more organized.
+    
+    To increase the likelihood of finishing successfully, I plan to:
+1. Continue working on a feature-by-feature basis using clear GitHub issues
+2. Keep branches updated and merge changes frequently to avoid conflicts
+3. Finish the remaining core features (score, collisions, keyboard logic) early
+4. Create new test file 
 ```
 
 ---
