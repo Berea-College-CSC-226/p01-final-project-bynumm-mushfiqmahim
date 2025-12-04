@@ -66,7 +66,7 @@ class Snake:
             pygame.draw.rect(screen, (0, 255, 0), rect)
 
     def check_self_collision(self):
-        """Check if the snake ran into itself."""
+        """Check if the snake ran into itself"""
         # TO DO: implement self-collision logic later
         pass
 

@@ -3,7 +3,7 @@ import pygame
 class Obstacle:
     """
     Represents obstacles/hazards in the game.
-    Snake must avoid these.
+    Snake must avoid these
     """
 
     def __init__(self, x, y, size=20):

@@ -17,7 +17,7 @@ class Food:
 
     def respawn(self):
         """
-        Places food at a new random position.
+        Places food at new random position.
         """
         self.x = random.randrange(0, self.width, self.block_size)
         self.y = random.randrange(0, self.height, self.block_size)

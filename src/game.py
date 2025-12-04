@@ -108,7 +108,7 @@ class Game:
         self.food.draw(self.screen)
         for obs in self.obstacles:
             obs.draw(self.screen)
-        # later: draw scoreboard here
+        ## later: draw scoreboard here
 
     def _draw_game_over_screen(self):
         """Draw the Game Over screen with final score and instructions."""
