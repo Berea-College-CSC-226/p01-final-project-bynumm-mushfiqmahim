@@ -22,15 +22,19 @@ class Game:
         # Clock for controlling FPS
         self.clock = pygame.time.Clock()
 
-        # fonts for text (score + game over)
+        # fonts for text (score + game over + pause)
         self.font_large = pygame.font.SysFont(None, 48)
         self.font_small = pygame.font.SysFont(None, 32)
 
         # game state
         self.running = True       # main loop flag
         self.game_over = False    # are we in game over screen?
+        self.paused = False       # is the game currently paused?
 
-        # score (will be increased later when food is eaten)
+        # base speed (frames per second)
+        self.base_speed = 10
+
+        # score
         self.score = 0
 
         self._create_objects()
@@ -38,7 +42,13 @@ class Game:
     def _create_objects(self):
         """Create or reset all game objects."""
         self.snake = Snake()
-        self.food = Food()
+        self.food = Food(
+            block_size=self.snake.block_size,
+            width=self.width,
+            height=self.height,
+            top_margin=40,  # must match your HUD bar height
+        )
+
         self.obstacles = [
             Obstacle(200, 200),
             Obstacle(220, 200),
@@ -63,11 +73,21 @@ class Game:
                         # restart game
                         self.game_over = False
                         self.score = 0
+                        self.paused = False
                         self._create_objects()
                     # don't process movement keys when game_over
                     continue
 
-                # Normal movement controls (only when NOT game over)
+                # Toggle pause (only when not game over)
+                if event.key == pygame.K_p:
+                    self.paused = not self.paused
+                    return  # don’t handle movement on the same key press
+
+                # If paused, ignore movement keys
+                if self.paused:
+                    continue
+
+                # Normal movement controls (only when NOT game over or paused)
                 if event.key == pygame.K_UP:
                     self.snake.change_direction((0, -20))
                 elif event.key == pygame.K_DOWN:
@@ -79,8 +99,8 @@ class Game:
 
     def update(self):
         """Updates all game objects."""
-        # If game over, do not update game logic
-        if self.game_over:
+        # If game over or paused, do not update game logic
+        if self.game_over or self.paused:
             return
 
         # move the snake
@@ -100,15 +120,40 @@ class Game:
                 self.game_over = True
                 return
 
-        # later: check snake-food collisions, scoring, etc.
+        # check snake–food collision
+        head_x, head_y = self.snake.segments[0]
+        if head_x == self.food.x and head_y == self.food.y:
+            # snake eats food
+            self.snake.grow()        # grow by one block
+            self.food.respawn()      # move food to a new random spot
+            self.score += 5          # +5 points per food
+            print(f"Food eaten! Score is now {self.score}")
 
     def _draw_game_objects(self):
-        """Draw snake, food, obstacles during normal gameplay."""
+        """Draw snake, food, obstacles, and HUD during normal gameplay."""
+        # draw snake, food, obstacles
         self.snake.draw(self.screen)
         self.food.draw(self.screen)
         for obs in self.obstacles:
             obs.draw(self.screen)
-        ## later: draw scoreboard here
+
+        # draw top HUD bar
+        hud_height = 40
+        hud_rect = pygame.Rect(0, 0, self.width, hud_height)
+        pygame.draw.rect(self.screen, (25, 25, 35), hud_rect)
+
+        # score text on top of the HUD
+        score_text = self.font_small.render(f"Score: {self.score}", True, (255, 255, 255))
+        self.screen.blit(score_text, (10, 10))
+
+        # if paused, overlay a 'Paused' message
+        if self.paused:
+            paused_text = self.font_large.render("Paused", True, (255, 255, 0))
+            instr_text = self.font_small.render("Press P to resume", True, (255, 255, 0))
+            p_rect = paused_text.get_rect(center=(self.width // 2, self.height // 2 - 20))
+            i_rect = instr_text.get_rect(center=(self.width // 2, self.height // 2 + 20))
+            self.screen.blit(paused_text, p_rect)
+            self.screen.blit(instr_text, i_rect)
 
     def _draw_game_over_screen(self):
         """Draw the Game Over screen with final score and instructions."""
@@ -127,8 +172,17 @@ class Game:
 
     def draw(self):
         """Draws everything to the screen."""
-        # clear screen
-        self.screen.fill((0, 0, 0))  # black background
+        # dark background
+        self.screen.fill((15, 15, 20))
+
+        # draw grid lines every 20 pixels
+        grid_color = (40, 40, 50)
+        cell_size = 20
+
+        for x in range(0, self.width, cell_size):
+            pygame.draw.line(self.screen, grid_color, (x, 0), (x, self.height))
+        for y in range(0, self.height, cell_size):
+            pygame.draw.line(self.screen, grid_color, (0, y), (self.width, y))
 
         if not self.game_over:
             # normal game rendering
@@ -145,6 +199,9 @@ class Game:
             self.handle_events()
             self.update()
             self.draw()
-            self.clock.tick(10)  # 10 FPS for now
+
+            # dynamic speed: faster as score increases (every 20 points +1 FPS)
+            dynamic_fps = self.base_speed + (self.score // 20)
+            self.clock.tick(dynamic_fps)
 
         pygame.quit()

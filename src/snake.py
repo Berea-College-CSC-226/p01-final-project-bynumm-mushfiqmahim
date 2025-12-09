@@ -21,9 +21,17 @@ class Snake:
     def change_direction(self, new_direction):
         """
         Changes direction of the snake.
-        new_direction is a tuple (dx, dy)
+        new_direction is a tuple (dx, dy).
+
+        Prevents reversing directly (e.g., right -> left).
         """
-        # TO DO: add logic to prevent reversing directly
+        current_dx, current_dy = self.direction
+        new_dx, new_dy = new_direction
+
+        # If new direction is exactly opposite, ignore it
+        if (new_dx == -current_dx) and (new_dy == -current_dy):
+            return  # do not allow 180-degree turn
+
         self.direction = new_direction
 
     def move(self):
@@ -59,11 +67,39 @@ class Snake:
 
     def draw(self, screen):
         """
-        Draws the snake on the screen as green blocks.
+        Draws the snake on the screen:
+        - Head with a brighter color and eyes
+        - Body with a slightly darker green
         """
-        for (x, y) in self.segments:
+        if not self.segments:
+            return
+
+        # draw head
+        head_x, head_y = self.segments[0]
+        head_rect = pygame.Rect(head_x, head_y, self.block_size, self.block_size)
+        pygame.draw.rect(screen, (0, 220, 0), head_rect)  # brighter head
+
+        # draw eyes on the head
+        eye_radius = 3
+        offset = 4
+        # two little eye circles
+        pygame.draw.circle(
+            screen,
+            (0, 0, 0),
+            (head_x + self.block_size - offset, head_y + offset),
+            eye_radius,
+        )
+        pygame.draw.circle(
+            screen,
+            (0, 0, 0),
+            (head_x + self.block_size - offset, head_y + self.block_size - offset),
+            eye_radius,
+        )
+
+        # draw body
+        for (x, y) in self.segments[1:]:
             rect = pygame.Rect(x, y, self.block_size, self.block_size)
-            pygame.draw.rect(screen, (0, 255, 0), rect)
+            pygame.draw.rect(screen, (0, 180, 0), rect)
 
     def check_self_collision(self):
         """Check if the snake ran into itself"""
@@ -86,4 +122,3 @@ class Snake:
         """Return a pygame.Rect for the snake's head (for collision checks)."""
         head_x, head_y = self.segments[0]
         return pygame.Rect(head_x, head_y, self.block_size, self.block_size)
-
