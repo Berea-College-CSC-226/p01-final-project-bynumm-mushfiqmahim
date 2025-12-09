@@ -2,9 +2,6 @@ import pygame
 import random
 
 class Food:
-    """
-    Represents the food that the snake eats.
-    """
 
     def __init__(self, block_size=20, width=600, height=600):
         self.block_size = block_size
