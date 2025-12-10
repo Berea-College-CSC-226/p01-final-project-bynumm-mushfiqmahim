@@ -176,8 +176,8 @@ class Game:
         # Move the snake
         self.snake.move()
 
-        # End the game if the snake hits the wall
-        if self.snake.is_out_of_bounds(self.width, self.height):
+        # end the game if the snake hits the wall (respect HUD top margin)
+        if self.snake.is_out_of_bounds(self.width, self.height, top_margin=40):
             print("Game Over: Snake hit the wall!")
             self.game_over = True
             return
