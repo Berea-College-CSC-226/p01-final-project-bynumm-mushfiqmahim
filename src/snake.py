@@ -3,69 +3,54 @@ import pygame
 class Snake:
     """
     Represents the player's snake.
-    Handles position, movement, growing, and collisions.
+    Handles position, movement, growing and collisions.
     """
 
     def __init__(self, initial_length=3, block_size=20):
         self.block_size = block_size
 
-        # Start with a simple list of segments (x, y)
-        self.segments = [(100, 100), (80, 100), (60, 100)]
+        # Start somewhere in the upper-middle
+        start_x = 200
+        start_y = 200
+
+        self.segments = [
+            (start_x, start_y),
+            (start_x - block_size, start_y),
+            (start_x - 2 * block_size, start_y),
+        ]
 
         # Movement direction (dx, dy)
-        self.direction = (20, 0)          # current committed direction
-        self.next_direction = self.direction  # queued direction for next move
-
-        # How many growth steps are pending
+        self.direction = (block_size, 0)
+        self.next_direction = self.direction
         self.grow_pending = 0
 
     def change_direction(self, new_direction):
         """
-        Queues a direction change for the next move.
-        new_direction is a tuple (dx, dy).
-
-        Prevents reversing directly (e.g., right -> left),
-        even if the player mashes keys quickly.
-        """
+        Change direction for the next move and prevents reversing directly """
         new_dx, new_dy = new_direction
-
         curr_dx, curr_dy = self.direction
         next_dx, next_dy = self.next_direction
-
-        # If new direction is exactly opposite of current OR queued, ignore it
         if (new_dx == -curr_dx and new_dy == -curr_dy) or \
            (new_dx == -next_dx and new_dy == -next_dy):
             return  # do not allow 180-degree turn
-
-        # Otherwise, queue this as the next direction
         self.next_direction = new_direction
 
     def move(self):
         """
         Moves the snake by adding a new head and removing the last tail segment.
-        Uses the queued direction (next_direction).
-        If grow_pending > 0, the tail is NOT removed, so the snake grows.
+        the tail is NOT removed, so the snake grows.
         """
-        # Commit queued direction at the moment of movement
         self.direction = self.next_direction
-
-        # Current head position
         head_x, head_y = self.segments[0]
-
-        # Direction movement
         dx, dy = self.direction
-
-        # New head (move one block)
         new_head = (head_x + dx, head_y + dy)
-
-        # Add new head to the front of the list
         self.segments.insert(0, new_head)
 
-        # If we still need to grow, keep the tail (no pop)
+        # If still need to grow, keep the tail
         if self.grow_pending > 0:
             self.grow_pending -= 1
         else:
-            # Remove the last segment (tail) to keep same length
+            # Remove tail to keep same length
             self.segments.pop()
 
     def grow(self):
@@ -74,23 +59,19 @@ class Snake:
         """
         self.grow_pending += 1
 
-    def draw(self, screen):
+    def draw(self, screen, head_color=(0, 220, 0), body_color=(0, 180, 0)):
         """
-        Draws the snake on the screen:
-        - Head with a brighter color and eyes pointing in the movement direction
-        - Body with a slightly darker green
+        Draws the snake on the screen
         """
         if not self.segments:
             return
-
-        # ----- draw head -----
         head_x, head_y = self.segments[0]
         head_rect = pygame.Rect(head_x, head_y, self.block_size, self.block_size)
-        pygame.draw.rect(screen, (0, 220, 0), head_rect)  # brighter head
+        pygame.draw.rect(screen, head_color, head_rect)
 
         # draw eyes on the head based on direction
         eye_radius = 3
-        padding = 3  # small distance from edge
+        padding = 3
 
         dx, dy = self.direction
 
@@ -118,10 +99,10 @@ class Snake:
         pygame.draw.circle(screen, (0, 0, 0), eye1, eye_radius)
         pygame.draw.circle(screen, (0, 0, 0), eye2, eye_radius)
 
-        # ----- draw body -----
+        # draw body
         for (x, y) in self.segments[1:]:
             rect = pygame.Rect(x, y, self.block_size, self.block_size)
-            pygame.draw.rect(screen, (0, 180, 0), rect)
+            pygame.draw.rect(screen, body_color, rect)
 
     def check_self_collision(self):
         """Return True if the snake's head runs into its own body."""
@@ -153,6 +134,16 @@ class Snake:
         return False
 
     def get_head_rect(self):
-        """Return a pygame.Rect for the snake's head (for collision checks)."""
+        """for collision checks."""
         head_x, head_y = self.segments[0]
         return pygame.Rect(head_x, head_y, self.block_size, self.block_size)
+
+    def teleport_to(self, new_x, new_y):
+        """
+        Move the entire snake so that the head appears at (new_x, new_y)
+        """
+        head_x, head_y = self.segments[0]
+        dx = new_x - head_x
+        dy = new_y - head_y
+
+        self.segments = [(x + dx, y + dy) for (x, y) in self.segments]

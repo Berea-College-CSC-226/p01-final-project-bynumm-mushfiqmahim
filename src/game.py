@@ -3,8 +3,6 @@ import random
 from snake import Snake
 from food import Food
 from obstacle import Obstacle
-# from scoreboard import Scoreboard
-
 
 class Game:
     """
@@ -20,22 +18,18 @@ class Game:
         self.screen = pygame.display.set_mode((self.width, self.height))
         pygame.display.set_caption("Snake Game")
 
-        # Clock for controlling FPS
-        self.clock = pygame.time.Clock()
 
-        # Fonts for text (score + game over + pause)
+        self.clock = pygame.time.Clock() #Clock for FPS control
         self.font_large = pygame.font.SysFont(None, 48)
         self.font_small = pygame.font.SysFont(None, 32)
 
         # Game state
-        self.running = True        # main loop flag
-        self.game_over = False     # are we in game over screen?
-        self.paused = False        # is the game currently paused?
+        self.running = True
+        self.game_over = False
+        self.paused = False
 
-        # Base speed (frames per second)
+        # Base speed, score and level
         self.base_speed = 10
-
-        # Score and level
         self.score = 0
         self.level = 1
 
@@ -45,7 +39,7 @@ class Game:
         """Create or reset all game objects."""
         self.snake = Snake()
 
-        # Food should respect HUD (top_margin=40)
+        # Food should respect HUD
         self.food = Food(
             block_size=self.snake.block_size,
             width=self.width,
@@ -53,15 +47,29 @@ class Game:
             top_margin=40,
         )
 
-        # Start with a few obstacles
-        self.obstacles = [
-            Obstacle(200, 200),
-            Obstacle(220, 200),
-            Obstacle(240, 200),
-        ]
-        # self.scoreboard = Scoreboard()
+        # Game start with a few obstacles, but they don't overlap
+        self.obstacles = []
+        for _ in range(3):
+            self._add_random_obstacle()
 
-    # ---------- LEVEL / OBSTACLE / FOOD HELPERS ----------
+    def _get_snake_colors_for_level(self):
+        """
+        Return (head_color, body_color) based on current level.
+        """
+        palette = [
+            # level 1
+            ((0, 220, 0), (0, 180, 0)),        # green
+            # level 2
+            ((0, 210, 255), (0, 150, 220)),    # cyan/blue
+            # level 3
+            ((255, 210, 0), (220, 170, 0)),    # yellow/orange
+            # level 4
+            ((255, 120, 0), (220, 90, 0)),     # deeper orange
+            # level 5+
+            ((220, 0, 120), (180, 0, 90)),     # magenta/purple
+        ]
+        idx = min(self.level - 1, len(palette) - 1)
+        return palette[idx]
 
     def _update_level(self):
         """Update level based on score, and trigger level-up effects."""
@@ -81,19 +89,17 @@ class Game:
         """Add a new obstacle at a random safe grid position."""
         block_size = self.snake.block_size
         top_margin = 40  # avoid HUD area
-
-        # Precompute all possible grid positions
         x_positions = list(range(0, self.width, block_size))
         y_positions = list(range(top_margin, self.height, block_size))
 
-        # Collect positions that are NOT allowed (snake, food, existing obstacles)
-        forbidden = set(self.snake.segments)  # snake body
+        # NOT allowed position (snake, food, existing obstacles)
+        forbidden = set(self.snake.segments)
         forbidden.add((self.food.x, self.food.y))
         for obs in self.obstacles:
             if hasattr(obs, "x") and hasattr(obs, "y"):
                 forbidden.add((obs.x, obs.y))
 
-        # Try several times to find a free spot
+        # find a free spot
         for _ in range(100):
             x = random.choice(x_positions)
             y = random.choice(y_positions)
@@ -107,7 +113,6 @@ class Game:
     def _respawn_food_safely(self):
         """
         Respawn food, but avoid placing it on the snake or on any obstacle.
-        Uses Food.respawn() repeatedly until a free spot is found.
         """
         forbidden = set(self.snake.segments)
         for obs in self.obstacles:
@@ -121,8 +126,6 @@ class Game:
 
         print("Warning: could not find free spot for food after 100 tries.")
 
-    # ---------- EVENT HANDLING ----------
-
     def handle_events(self):
         """Handles keyboard and quit events."""
         for event in pygame.event.get():
@@ -130,11 +133,11 @@ class Game:
                 self.running = False
 
             if event.type == pygame.KEYDOWN:
-                # ESC always quits
+                # ESC quits
                 if event.key == pygame.K_ESCAPE:
                     self.running = False
 
-                # If game is over: allow restart
+                # Allow restart
                 if self.game_over:
                     if event.key == pygame.K_r:
                         # Restart game
@@ -143,19 +146,18 @@ class Game:
                         self.level = 1
                         self.paused = False
                         self._create_objects()
-                    # Don't process movement keys when game_over
                     continue
 
-                # Toggle pause (only when not game over)
+                # Pause during game
                 if event.key == pygame.K_p:
                     self.paused = not self.paused
-                    return  # Don’t handle movement on the same key press
+                    return
 
-                # If paused, ignore movement keys
+                # Ignore movement keys
                 if self.paused:
                     continue
 
-                # Normal movement controls (only when NOT game over or paused)
+                # Movement controls
                 if event.key == pygame.K_UP:
                     self.snake.change_direction((0, -20))
                 elif event.key == pygame.K_DOWN:
@@ -165,18 +167,16 @@ class Game:
                 elif event.key == pygame.K_RIGHT:
                     self.snake.change_direction((20, 0))
 
-    # ---------- GAME LOGIC ----------
-
     def update(self):
         """Updates all game objects."""
-        # If game over or paused, do not update game logic
+        # no update when game over or pause
         if self.game_over or self.paused:
             return
 
-        # Move the snake
+
         self.snake.move()
 
-        # end the game if the snake hits the wall (respect HUD top margin)
+        # End the game if the snake hits the wall
         if self.snake.is_out_of_bounds(self.width, self.height, top_margin=40):
             print("Game Over: Snake hit the wall!")
             self.game_over = True
@@ -215,34 +215,30 @@ class Game:
             # Respawn food somewhere safe (not on snake or obstacles)
             self._respawn_food_safely()
 
-            # Update level after changing score
+            # Update level
             self._update_level()
-
-    # ---------- DRAWING ----------
 
     def _draw_game_objects(self):
         """Draw snake, food, obstacles, and HUD during normal gameplay."""
-        # Draw snake, food, obstacles
-        self.snake.draw(self.screen)
+        head_color, body_color = self._get_snake_colors_for_level()
+        self.snake.draw(self.screen, head_color=head_color, body_color=body_color)
         self.food.draw(self.screen)
         for obs in self.obstacles:
             obs.draw(self.screen)
 
-        # Draw top HUD bar
+        # top HUD bar
         hud_height = 40
         hud_rect = pygame.Rect(0, 0, self.width, hud_height)
         pygame.draw.rect(self.screen, (25, 25, 35), hud_rect)
 
-        # Score text
+        # Score and Level text
         score_text = self.font_small.render(f"Score: {self.score}", True, (255, 255, 255))
         self.screen.blit(score_text, (10, 10))
-
-        # Level text (top-right)
         level_text = self.font_small.render(f"Level: {self.level}", True, (255, 255, 255))
         level_rect = level_text.get_rect(topright=(self.width - 10, 10))
         self.screen.blit(level_text, level_rect)
 
-        # If paused, overlay a 'Paused' message
+        # Paused message
         if self.paused:
             paused_text = self.font_large.render("Paused", True, (255, 255, 0))
             instr_text = self.font_small.render("Press P to resume", True, (255, 255, 0))
@@ -271,11 +267,8 @@ class Game:
 
     def draw(self):
         """Draws everything to the screen."""
-        # Dark background
         self.screen.fill((15, 15, 20))
-
-        # Draw grid lines every block_size pixels
-        grid_color = (40, 40, 50)
+        grid_color = (40, 40, 50) #grid lines
         cell_size = self.snake.block_size
 
         for x in range(0, self.width, cell_size):
@@ -284,15 +277,11 @@ class Game:
             pygame.draw.line(self.screen, grid_color, (0, y), (self.width, y))
 
         if not self.game_over:
-            # Normal game rendering
             self._draw_game_objects()
         else:
-            # Show game over screen
             self._draw_game_over_screen()
 
         pygame.display.flip()
-
-    # ---------- MAIN LOOP ----------
 
     def run(self):
         """Main game loop."""
@@ -301,7 +290,7 @@ class Game:
             self.update()
             self.draw()
 
-            # Dynamic speed: faster as level increases (every level +1 FPS)
+            # Speed increases (every level +1 FPS)
             dynamic_fps = self.base_speed + (self.level - 1)
             self.clock.tick(dynamic_fps)
 
