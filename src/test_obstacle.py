@@ -14,7 +14,6 @@ class TestObstacle(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        # initialize pygame once for all tests
         pygame.init()
 
     @classmethod
@@ -36,11 +35,8 @@ class TestObstacle(unittest.TestCase):
         obs = Obstacle(200, 220, size=20)
         rect = obs.get_rect()
 
-        # Another rect in the exact same place
         other = pygame.Rect(200, 220, 20, 20)
         self.assertTrue(rect.colliderect(other))
-
-        # A rect far away should not collide
         far = pygame.Rect(400, 400, 20, 20)
         self.assertFalse(rect.colliderect(far))
 

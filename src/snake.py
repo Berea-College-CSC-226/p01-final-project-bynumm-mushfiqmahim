@@ -3,16 +3,13 @@ import pygame
 class Snake:
     """
     Represents the player's snake.
-    Handles position, movement, growing and collisions.
+    Handles position, movement growing and collisions.
     """
 
     def __init__(self, initial_length=3, block_size=20):
         self.block_size = block_size
-
-        # Start somewhere in the upper-middle
         start_x = 200
         start_y = 200
-
         self.segments = [
             (start_x, start_y),
             (start_x - block_size, start_y),
@@ -46,12 +43,11 @@ class Snake:
         new_head = (head_x + dx, head_y + dy)
         self.segments.insert(0, new_head)
 
-        # If still need to grow, keep the tail
+        # If it still needs to grow, keep the tail
         if self.grow_pending > 0:
             self.grow_pending -= 1
         else:
-            # Remove tail to keep same length
-            self.segments.pop()
+            self.segments.pop() # Remove tail to keep same length
 
     def grow(self):
         """
@@ -72,7 +68,6 @@ class Snake:
         # draw eyes on the head based on direction
         eye_radius = 3
         padding = 3
-
         dx, dy = self.direction
 
         if dx > 0:  # moving RIGHT
@@ -116,7 +111,6 @@ class Snake:
     def is_out_of_bounds(self, width, height, top_margin=40):
         """
         Return True if snake head goes outside the playable area.
-
         Playable:
         - x from 0 to width - block_size
         - y from top_margin to height - block_size

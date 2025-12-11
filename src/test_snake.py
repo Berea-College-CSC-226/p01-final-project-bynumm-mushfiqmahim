@@ -25,10 +25,8 @@ class TestSnake(unittest.TestCase):
         """Calling grow() then move() should increase length by 1."""
         snake = Snake()
         original_length = len(snake.segments)
-
         snake.grow()
         snake.move()
-
         self.assertEqual(len(snake.segments), original_length + 1)
 
 

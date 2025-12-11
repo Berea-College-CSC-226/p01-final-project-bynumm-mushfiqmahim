@@ -14,14 +14,10 @@ class TestFood(unittest.TestCase):
     def test_initial_position_in_bounds_and_on_grid(self):
         """Food should start within the window and aligned to the grid."""
         f = Food(block_size=20, width=600, height=600, top_margin=40)
-
-        # in bounds
         self.assertGreaterEqual(f.x, 0)
         self.assertLess(f.x, 600)
         self.assertGreaterEqual(f.y, 40)     # respect HUD margin
         self.assertLess(f.y, 600)
-
-        # aligned to grid
         self.assertEqual(f.x % f.block_size, 0)
         self.assertEqual(f.y % f.block_size, 0)
 
@@ -33,13 +29,10 @@ class TestFood(unittest.TestCase):
         for _ in range(10):
             f.respawn()
 
-            # in bounds
             self.assertGreaterEqual(f.x, 0)
             self.assertLess(f.x, 600)
             self.assertGreaterEqual(f.y, 40)
             self.assertLess(f.y, 600)
-
-            # aligned to grid
             self.assertEqual(f.x % f.block_size, 0)
             self.assertEqual(f.y % f.block_size, 0)
 
