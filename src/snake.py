@@ -100,7 +100,7 @@ class Snake:
             pygame.draw.rect(screen, body_color, rect)
 
     def check_self_collision(self):
-        """Return True if the snake's head runs into its own body."""
+        """Return True if the snake's head runs into its own body"""
         if len(self.segments) <= 3:
             return False
 

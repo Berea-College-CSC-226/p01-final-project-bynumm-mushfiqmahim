@@ -22,7 +22,7 @@ class TestSnake(unittest.TestCase):
         self.assertNotEqual(head_before, head_after)
 
     def test_grow_increases_length_by_one(self):
-        """Calling grow() then move() should increase length by 1."""
+        """Calling grow() then move() should increase length by 1"""
         snake = Snake()
         original_length = len(snake.segments)
         snake.grow()

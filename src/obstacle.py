@@ -13,6 +13,6 @@ class Obstacle:
         pygame.draw.rect(screen, (100, 100, 100), rect)
 
     def get_rect(self):
-        """ collision detection. """
+        """ collision detection"""
         return pygame.Rect(self.x, self.y, self.size, self.size)
 

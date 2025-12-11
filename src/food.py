@@ -19,7 +19,7 @@ class Food:
         """
         Places food at a new random position on the grid.
         Ensures it does NOT spawn under the top HUD bar.
-        Randomly decides if this food is special.
+        Randomly decides if this food is special
         """
         x_positions = list(range(0, self.width, self.block_size))
         min_y = max(self.top_margin, 0)

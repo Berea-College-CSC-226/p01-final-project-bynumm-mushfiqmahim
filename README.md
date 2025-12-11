@@ -130,8 +130,8 @@ Throughout the project, I actively used the GitHub issue queue to track bugs, mi
 Some issues such as direction reversal, food not respawning and snake-eye misalignment were identified, documented and 
 then fixed and closed. Other enhancements—like dynamic obstacle generation, additional visual polish and a more advanced 
 scoreboard—were added to the queue but intentionally left open as future improvements due to time limits.
-
-### Reflection
+ 
+###  Reflection
 
 Each partner should write three to four well-written paragraphs address the following (at a minimum):
 - Why did you select the project that you did?

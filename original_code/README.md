@@ -1,14 +1,14 @@
 ### T11: The Legend of Tuna: Breath of Catnip
 
 ### t11_game.py
-######################################################################
+#####################################################################
 # Author: Mekiyan, Mushfiq
 # Username: BynumM, mushfiqmahim
 #
 # Assignment: T11: The Legend of Tuna: Breath of Catnip
 #
 # Purpose: Learn about classes, inheritance, and Pygame
-######################################################################
+#####################################################################
 # Acknowledgements:
 #
 # Inspired by Zelda, rebuilt into Python by: https://github.com/clear-code-projects/Zelda

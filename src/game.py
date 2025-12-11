@@ -284,7 +284,7 @@ class Game:
         pygame.display.flip()
 
     def run(self):
-        """Main game loop."""
+        """Main game loop"""
         while self.running:
             self.handle_events()
             self.update()

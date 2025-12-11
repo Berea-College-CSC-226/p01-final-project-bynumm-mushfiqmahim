@@ -31,7 +31,7 @@ class TestObstacle(unittest.TestCase):
         self.assertEqual(rect.height, 20)
 
     def test_rect_collision_behaves_as_expected(self):
-        """Obstacle rect should collide with another rect at the same place."""
+        """Obstacle rect should collide with another rect at the same place"""
         obs = Obstacle(200, 220, size=20)
         rect = obs.get_rect()
 

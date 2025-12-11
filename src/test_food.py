@@ -22,7 +22,7 @@ class TestFood(unittest.TestCase):
         self.assertEqual(f.y % f.block_size, 0)
 
     def test_respawn_stays_in_bounds_and_on_grid(self):
-        """After respawn, food should still be in bounds and on the grid."""
+        """After respawn, food should still be in bounds and on the grid"""
         f = Food(block_size=20, width=600, height=600, top_margin=40)
 
         # call respawn a few times
